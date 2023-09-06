@@ -70,6 +70,7 @@ void monty(char *file_path)
 	stack_t *stack = NULL; // Pila inicialmente vacía
 	char *input = NULL;
 	size_t input_len = 0;
+	unsigned int line_number = 0;
 
 	instructions instr[] = {
 		{"push", push},
