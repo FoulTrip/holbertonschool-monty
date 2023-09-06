@@ -60,7 +60,7 @@ void pall(stack_t **stack, unsigned int line_number, char *arg)
 
 int main()
 {
-	stack_t **stack = NULL;
+	stack_t *stack = NULL;
 	unsigned int line_number = 0;
 
 	instructions instr[] = {
