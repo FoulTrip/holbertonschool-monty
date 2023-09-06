@@ -58,10 +58,18 @@ void pall(stack_t **stack, unsigned int line_number, char *arg)
 	}
 }
 
-int main()
+void monty(char *file_path)
 {
-	stack_t *stack = NULL;
-	unsigned int line_number = 0;
+	FILE *file = fopen(file_path, "r");
+	if (!file)
+	{
+		printf("Error: No se puede abrir el archivo %s\n", file_path);
+		exit(EXIT_FAILURE);
+	}
+
+	stack_t *stack = NULL; // Pila inicialmente vacía
+	char *input = NULL;
+	size_t input_len = 0;
 
 	instructions instr[] = {
 		{"push", push},
@@ -69,46 +77,35 @@ int main()
 		{NULL, NULL}
 	};
 
-	char *input = NULL;
-	size_t input_len = 0;
-
-	while (1)
-	{
+	while (getline(&input, &input_len, file) != -1)
+        {
 		line_number++;
-		printf("ingrese a una instruccion: ");
+                input[strcspn(input, "\n")] = '\0';
 
-		ssize_t read = getline(&input, &input_len, stdin);
+                char opcode[256];
+                char arg[256];
 
-		if (read == -1)
-		{
-			break;
-		}
-
-		input[strcspn(input, "\n")] = '\0';
-
-		char opcode[256];
-		char arg[256];
-
-		if (sscanf(input, "%255s %255s", opcode, arg) == 2)
-		{
-			for (unsigned int j = 0; instr[j].opcode; j++)
+                if (sscanf(input, "%255s %255s", opcode, arg) == 2)
+                {
+			int found = 0;
+                        for (unsigned int j = 0; instr[j].opcode; j++)
 			{
-				if (strcmp(opcode, instr[j].opcode) == 0)
-				{
-					instr[j].f(&stack, line_number, arg);
-					break;
-				}
-				else if (instr[j].opcode == NULL)
-				{
-					printf("Error en la linea %u: Instruccion desconocida '%s'\n", line_number, opcode);
-				}
-			}
-		}
-		else if (strcmp(input, "pall") == 0)
-		{
-			pall(&stack, line_number, NULL);
+				if (strcmp(instr[j].opcode, opcode) == 0)
+                                {
+					instr[j].f(&stack, line_number, arg); // Ejecutar la operación correspondiente
+                                        found = 1;
+                                        break;
+                                }
+		        }
+                        if (!found)
+			{
+				printf("Error en la línea %u: instrucción desconocida '%s'\n", line_number, opcode);
+				exit(EXIT_FAILURE);
+                        }
 		}
 	}
+
+	fclose(file);
 
 	while (stack)
 	{
@@ -117,6 +114,19 @@ int main()
 		free(temp);
 	}
 
-	free(input);
+	free (input);
+}
+
+int main(int argc, char *argv[])
+{
+	if (argc != 2)
+	{
+		printf("USO: %s archivo\n", argv[0]);
+		return (EXIT_FAILURE);
+	}
+
+	char *file_path = argv[1];
+	monty(file_path);
+
 	return (0);
 }
