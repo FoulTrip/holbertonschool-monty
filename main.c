@@ -93,9 +93,9 @@ int main()
 		{
 			for (unsigned int j = 0; instr[j].opcode; j++)
 			{
-				if (strcmp(instr[j].opcode) == 0)
+				if (strcmp(opcode, instr[j].opcode) == 0)
 				{
-					instr[j].f(&stack, &line_number, arg);
+					instr[j].f(&stack, line_number, arg);
 					break;
 				}
 				else if (instr[j].opcode == NULL)
@@ -104,7 +104,7 @@ int main()
 				}
 			}
 		}
-		else if (strcmp(input, "pall") == 1)
+		else if (strcmp(input, "pall") == 0)
 		{
 			pall(&stack, line_number, NULL);
 		}
