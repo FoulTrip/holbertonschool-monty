@@ -1,23 +1,50 @@
-#ifndef HEADER_H
-#define HEADER_H
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef MONTY_H
+#define MONTY_H
 
-typedef struct stack_t
+#include <stdio.h>
+#include <stdarg.h>
+#include <stddef.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <ctype.h>
+
+/**
+ * struct stack_s - doubly linked list representation of a stack (or queue)
+ * @n: integer
+ * @prev: points to the previous element of the stack (or queue)
+ * @next: points to the next element of the stack (or queue)
+ *
+ * Description: doubly linked list node structure
+ * for stack, queues, LIFO, FIFO
+ */
+typedef struct stack_s
 {
 	int n;
-	struct stack_t *prev;
-	struct stack_t *next;
+	struct stack_s *prev;
+	struct stack_s *next;
 } stack_t;
 
-typedef struct instructions
+/**
+ * struct instruction_s - opcode and its function
+ * @opcode: the opcode
+ * @f: function to handle the opcode
+ *
+ * Description: opcode and its function
+ * for stack, queues, LIFO, FIFO
+ */
+typedef struct instruction_s
 {
 	char *opcode;
-	void (*f)(stack_t **stack, unsigned int line_number, char *arg);
-} instructions;
+	void (*f)(stack_t **stack, unsigned int line_number);
+} instruction_t;
 
-void push(stack_t **stack, unsigned int line_number, char *arg);
-void pall(stack_t **stack, unsigned int line_number, char *arg);
-
+stack_t *stack = NULL;
+void push(stack_t **stack, int value);
+void pall(stack_t **stack, unsigned int line_number);
+void pint(stack_t **stack, unsigned int line_number);
+void pop(stack_t **stack, unsigned int line_number);
+void swap(stack_t **stack, unsigned int line_number);
+void free_dlistint(stack_t *stack);
+size_t dlistint_len(const stack_t *stack);
 #endif
