@@ -185,7 +185,7 @@ void pop(stack_t **stack, unsigned int line_number)
 }
 
 /**
- * pop - removes the first values on the stack
+ * swap - Swaps for the nodes
  * @stack: Pointer to the stack
  * @line_number: Line number in the script
  */
@@ -217,7 +217,7 @@ void swap(stack_t **stack, unsigned int line_number)
 
 /**
  * free_dlistint - function that frees a list
- * @head: pointer to the header of the nodes
+ * @stack: pointer to the header of the nodes
  * Return: void
  */
 void free_dlistint(stack_t *stack)
@@ -235,7 +235,6 @@ void free_dlistint(stack_t *stack)
  * @h: pointer to the header of the nodes
  * Return: the numbers of nodes
  */
-
 size_t dlistint_len(const stack_t *stack)
 {
 	size_t i = 0;
@@ -253,7 +252,6 @@ size_t dlistint_len(const stack_t *stack)
  * @stack : pointer to list
  * Return: sum of top two elements or the stack
  */
-
 int sum_dlistint(stack_t *stack)
 
 {
@@ -276,7 +274,6 @@ int sum_dlistint(stack_t *stack)
  * @index: the index of the list where the new node should be added
  * Return: 1 if it succeeded, -1 if it failed
  */
-
 int delete_dnodeint_at_index(stack_t **stack, unsigned int index)
 {
 	unsigned int i;
