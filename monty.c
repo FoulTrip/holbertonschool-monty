@@ -1,4 +1,41 @@
 #include "monty.h"
+
+/**
+ * is_integer - Verifica si una cadena es un número entero válido.
+ * @str: Cadena de entrada a verificar
+ * Return: 1 si es un número entero válido, 0 en caso contrario.
+ */
+int is_integer(const char *str)
+{
+	if (*str == '-' || *str == '+')
+		str++; // Permite un signo negativo o positivo al principio
+	if (*str == '\0')
+		return 0; // La cadena está vacía
+	
+	for (; *str != '\0'; str++)
+	{
+		if (!isdigit(*str))
+			return 0; // No es un dígito
+	}
+	return 1; // Es un número entero
+}
+
+/**
+ * free_resources - Libera los recursos al finalizar el programa.
+ * @file: Puntero al archivo abierto
+ * @line: Puntero a la línea leída
+ * @stack: Puntero a la pila
+ */
+void free_resources(FILE *file, char *line, stack_t **stack)
+{
+	if (file)
+		fclose(file); // Cierra el archivo si está abierto
+	if (line)
+		free(line); // Libera la memoria asignada a la línea leída
+	if (*stack)
+		free_dlistint(*stack); // Libera la memoria de la pila
+}
+
 /**
  * main - Monty interpreter main function
  * @argc: Argument count
