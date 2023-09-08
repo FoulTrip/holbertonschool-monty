@@ -115,6 +115,8 @@ int process_line(char *line, stack_t **stack, size_t line_number)
 		fprintf(stderr, "L%lu: unknown instruction %s\n", line_number, opcode);
 		return (EXIT_FAILURE);
 	}
+
+	return (EXIT_SUCESS);
 }
 
 /**
