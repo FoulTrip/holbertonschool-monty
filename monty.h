@@ -49,6 +49,5 @@ void add(stack_t **stack, unsigned int line_number);
 void nop(stack_t **stack, unsigned int line_number);
 void free_dlistint(stack_t *stack);
 size_t dlistint_len(const stack_t *stack);
-int process_line(char *line, stack_t **stack, size_t line_number);
 
 #endif
