@@ -45,7 +45,6 @@ void free_resources(FILE *file, char *line, stack_t **stack)
 int main(int argc, char *argv[])
 {
 	FILE *file;
-	char *opcode, *value;
         size_t line_number = 0;
 	size_t len = 0;
 	char *line = NULL;
