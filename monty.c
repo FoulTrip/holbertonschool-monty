@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 		}
 		else if (strcmp(opcode, "add") == 0)
 		{
-			if (stack == NULL || (*stack)->next == NULL)
+			if (stack == NULL || stack->next == NULL)
 			{
 				fprintf(stderr, "L%lu: can't add, stack too short\n", line_number);
 				fclose(file);
