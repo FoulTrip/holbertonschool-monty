@@ -88,6 +88,18 @@ int main(int argc, char *argv[])
 			}
 			swap(&stack, line_number);
 		}
+		else if (strcmp(opcode, "add") == 0)
+		{
+			if (stack == NULL || stack->next == NULL)
+			{
+				fprintf(stderr, "L%lu: can't add, stack too short\n", line_number);
+				fclose(file);
+				free_dlistint(stack);
+				free(line);
+				exit(EXIT_FAILURE);
+			}
+			add(&stack, line_number);
+		}
 		else
 		{
 			fprintf(stderr, "L%lu: unknown instruction %s\n", line_number, opcode);
@@ -202,4 +214,21 @@ void swap(stack_t **stack, unsigned int line_number)
 	int tmp = (*stack)->n;
 	(*stack)->n = (*stack)->next->n;
 	(*stack)->next->n = tmp;
+}
+
+/**
+ * add - Adds the top two elements of the stack
+ * @stack: Puntero a la pila
+ * @line_number: Número de línea en el script
+ */
+void add(stack_t **stack, unsigned int line_number)
+{
+	if (*stack == NULL || (*stack)->next == NULL)
+	{
+		fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
+		exit(EXIT_FAILURE);
+	}
+
+	(*stack)->next->n += (*stack)->n; /* Suma los dos elementos superiores */
+	pop(stack, line_number); /* Elimina el elemento superior */
 }
