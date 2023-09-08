@@ -39,14 +39,15 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-stack_t *stack = NULL;
 void push(stack_t **stack, int value);
 void pall(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
 void pop(stack_t **stack, unsigned int line_number);
 void swap(stack_t **stack, unsigned int line_number);
-void add(stack_t **stack, unsigned int line_number);
-void nop(stack_t **stack, unsigned int line_number);
 void free_dlistint(stack_t *stack);
+size_t dlistint_len(const stack_t *stack);
+int sum_dlistint(stack_t *stack);
+int delete_dnodeint_at_index(stack_t **stack, unsigned int index);
+void nop(stack_t **stack, unsigned int line_number);
 
 #endif
