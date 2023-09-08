@@ -82,11 +82,11 @@ int main(int argc, char *argv[])
 			{
 				fprintf(stderr, "L%lu: can't swap, stack too short\n", line_number);
 				fclose(file);
-				free_dlistint(stack);
+				free_dlistint(*stack);
 		                free(line);
 		                exit(EXIT_FAILURE);
 			}
-			swap(&stack, line_number);
+			swap(stack, line_number);
 		}
 		else
 		{
