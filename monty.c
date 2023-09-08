@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 					exit(EXIT_FAILURE);
 				}
 			}
-			push(&stack, atoi(value));
+			push(stack_t, atoi(value));
 		}
 		else if (strcmp(opcode, "pall") == 0)
 		{
