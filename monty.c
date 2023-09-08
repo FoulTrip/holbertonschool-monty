@@ -100,6 +100,10 @@ int main(int argc, char *argv[])
 			}
 			add(&stack, line_number);
 		}
+		else if (strcmp(opcode, "nop") == 0)
+		{
+			nop(&stack, line_number);
+		}
 		else
 		{
 			fprintf(stderr, "L%lu: unknown instruction %s\n", line_number, opcode);
@@ -231,4 +235,15 @@ void add(stack_t **stack, unsigned int line_number)
 
 	(*stack)->next->n += (*stack)->n; /* Suma los dos elementos superiores */
 	pop(stack, line_number); /* Elimina el elemento superior */
+}
+
+/**
+ * nop - Doesn't do anything
+ * @stack: Puntero a la pila
+ * @line_number: Número de línea en el script
+ */
+void nop(stack_t **stack, unsigned int line_number)
+{
+    (void)stack;
+    (void)line_number;
 }
