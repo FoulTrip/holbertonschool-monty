@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         stack_t *stack = NULL;
 
         if (argc != 2 || !(file = fopen(argv[1], "r")))
-		return fprintf(stderr, "USAGE: monty file\n"), (EXIT_FAILURE);
+		return fprintf(stderr, "USAGE: monty file\n"), EXIT_FAILURE;
 	file = fopen(argv[1], "r");
 	if (file == NULL)
 	{
