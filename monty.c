@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
 			 pop(&stack, line_number);
 		}
-		else if
+		else if (strcmp(opcode, "swap") == 0)
 		{
 			if (stack == NULL || (*stack)->next == NULL)
 			{
