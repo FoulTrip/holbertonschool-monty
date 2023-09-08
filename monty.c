@@ -50,9 +50,9 @@ int main(int argc, char *argv[])
 	char *line = NULL;
         stack_t *stack = NULL;
 
-        if (argc != 1 || !(file = fopen(argv[1], "r")))
+        if (argc != 2 || !(file = fopen(argv[1], "r")))
 		return fprintf(stderr, "USAGE: monty file\n"), (EXIT_FAILURE);
-
+	file = fopen(argv[1], "r");
 	if (file == NULL)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
