@@ -1,4 +1,5 @@
 #include "monty.h"
+
 /**
  * main - Monty interpreter main function
  * @argc: Argument count
@@ -8,9 +9,9 @@
 int main(int argc, char *argv[])
 {
 	char *opcode, *value, *line = NULL;
-	size_t line_number = 0, len = 0;
+	size_t line_number = 0, len = 0, num_of_nodes, nodes;
 	FILE *file;
-	int i;
+	int i, sum;
 
 	if (argc != 2)
 	{
@@ -78,27 +79,25 @@ int main(int argc, char *argv[])
 		}
 		else if (strcmp(opcode, "swap") == 0)
 		{
-			if (stack == NULL || stack->next == NULL)
+			num_of_nodes = dlistint_len(stack);
+			if (num_of_nodes < 2)
 			{
 				fprintf(stderr, "L%lu: can't swap, stack too short\n", line_number);
-				fclose(file);
-				free_dlistint(stack);
-		                free(line);
-		                exit(EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 			}
 			swap(&stack, line_number);
 		}
 		else if (strcmp(opcode, "add") == 0)
 		{
-			if (stack == NULL || stack->next == NULL)
+			nodes = dlistint_len(stack);
+			if (nodes < 2)
 			{
 				fprintf(stderr, "L%lu: can't add, stack too short\n", line_number);
-				fclose(file);
-				free_dlistint(stack);
-				free(line);
 				exit(EXIT_FAILURE);
 			}
-			add(&stack, line_number);
+			sum = sum_dlistint(stack);
+			delete_dnodeint_at_index(&stack, 0);
+			stack->n = sum;
 		}
 		else if (strcmp(opcode, "nop") == 0)
 		{
@@ -119,4 +118,4 @@ int main(int argc, char *argv[])
 	free(line);
 	fclose(file);
 	return (0);
-} 
+}
