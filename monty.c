@@ -45,9 +45,10 @@ void free_resources(FILE *file, char *line, stack_t **stack)
 int main(int argc, char *argv[])
 {
 	char *opcode, *value, *line = NULL;
-        size_t line_number = 0;
-	size_t len = 0;
+        size_t line_number = 0, len = 0;
         FILE *file;
+	char *line = NULL;
+        stack_t *stack = NULL;
 
         if (argc != 2 || !(file = fopen(argv[1], "r")))
 		return fprintf(stderr, "USAGE: monty file\n"), EXIT_FAILURE;
@@ -58,11 +59,6 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
 		return (EXIT_FAILURE);
 	}
-	
-	char *line = NULL;
-        size_t len = 0;
-        size_t line_number = 0;
-        stack_t *stack = NULL;
 
 	while (getline(&line, &len, file) != -1)
         {
