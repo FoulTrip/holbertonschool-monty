@@ -49,11 +49,8 @@ int main(int argc, char *argv[])
 	size_t len = 0;
         FILE *file;
 
-        if (argc != 2)
-        {
-		fprintf(stderr, "USAGE: monty file\n");
-                return (EXIT_FAILURE);
-        }
+        if (argc != 2 || !(file = fopen(argv[1], "r")))
+		return fprintf(stderr, "USAGE: monty file\n"), EXIT_FAILURE;
 
 	file = fopen(argv[1], "r");
 	if (file == NULL)
