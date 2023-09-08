@@ -11,7 +11,7 @@ int is_integer(const char *str)
 		str++; /* Permite un signo negativo o positivo al principio */
 	if (*str == '\0')
 		return (0); /* La cadena está vacía */
-	
+
 	for (; *str != '\0'; str++)
 	{
 		if (!isdigit(*str))
@@ -45,7 +45,8 @@ void free_resources(FILE *file, char *line, stack_t **stack)
 int main(int argc, char *argv[])
 {
 	char *opcode, *value, *line = NULL;
-        size_t line_number = 0, len = 0;
+        size_t line_number = 0;
+	size_t len = 0;
         FILE *file;
 
         if (argc != 2)
