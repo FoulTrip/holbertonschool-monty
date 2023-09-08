@@ -53,7 +53,6 @@ int main(int argc, char *argv[])
         if (argc != 2 || !(file = fopen(argv[1], "r")))
 		return fprintf(stderr, "USAGE: monty file\n"), (EXIT_FAILURE);
 
-	FILE *file;
 	if (file == NULL)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
