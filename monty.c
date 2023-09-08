@@ -8,16 +8,16 @@
 int is_integer(const char *str)
 {
 	if (*str == '-' || *str == '+')
-		str++; // Permite un signo negativo o positivo al principio
+		str++; /* Permite un signo negativo o positivo al principio */
 	if (*str == '\0')
-		return 0; // La cadena está vacía
+		return (0); /* La cadena está vacía */
 	
 	for (; *str != '\0'; str++)
 	{
 		if (!isdigit(*str))
-			return 0; // No es un dígito
+			return (0); /* No es un dígito */
 	}
-	return 1; // Es un número entero
+	return (1); /* Es un número entero */
 }
 
 /**
@@ -29,11 +29,11 @@ int is_integer(const char *str)
 void free_resources(FILE *file, char *line, stack_t **stack)
 {
 	if (file)
-		fclose(file); // Cierra el archivo si está abierto
+		fclose(file); /* Cierra el archivo si está abierto */
 	if (line)
-		free(line); // Libera la memoria asignada a la línea leída
+		free(line); /* Libera la memoria asignada a la línea leída */
 	if (*stack)
-		free_dlistint(*stack); // Libera la memoria de la pila
+		free_dlistint(*stack); /* Libera la memoria de la pila */
 }
 
 /**
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
                 {
 			fprintf(stderr, "L%lu: usage: push integer\n", line_number);
                         free_resources(file, line, &stack);
-                        return EXIT_FAILURE;
+                        return (EXIT_FAILURE);
 		}
 
 		if (strcmp(opcode, "push") == 0)
