@@ -37,44 +37,6 @@ void free_resources(FILE *file, char *line, stack_t **stack)
 }
 
 /**
- * main - Monty interpreter main function
- * @argc: Argument count
- * @argv: Argument values
- * Return: 0 on success, 1 on failure
- */
-int main(int argc, char *argv[])
-{
-	FILE *file;
-        size_t line_number = 0;
-	size_t len = 0;
-	char *line = NULL;
-        stack_t *stack = NULL;
-
-        if (argc != 2 || !(file = fopen(argv[1], "r")))
-		return fprintf(stderr, "USAGE: monty file\n"), EXIT_FAILURE;
-	file = fopen(argv[1], "r");
-	if (file == NULL)
-	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		return (EXIT_FAILURE);
-	}
-
-	while (getline(&line, &len, file) != -1)
-        {
-		line_number++;
-		if (process_line(line, &stack, line_number) == EXIT_FAILURE)
-		{
-			free_resources(file, line, &stack);
-			return (EXIT_FAILURE);
-		}
-
-	}
-
-	free_resources(file, line, &stack);
-	return (EXIT_SUCCESS);
-}
-
-/**
  * process_line - Procesa una línea del archivo Monty
  * @line: Línea del archivo Monty a procesar
  * @stack: Puntero a la pila
@@ -112,6 +74,43 @@ int process_line(char *line, stack_t **stack, size_t line_number)
 		return (EXIT_FAILURE);
 	}
 
+	return (EXIT_SUCCESS);
+}
+
+/**
+ * main - Monty interpreter main function
+ * @argc: Argument count
+ * @argv: Argument values
+ * Return: 0 on success, 1 on failure
+ */
+int main(int argc, char *argv[])
+{
+	FILE *file;
+        size_t line_number = 0;
+	size_t len = 0;
+	char *line = NULL;
+        stack_t *stack = NULL;
+
+        if (argc != 2 || !(file = fopen(argv[1], "r")))
+		return fprintf(stderr, "USAGE: monty file\n"), EXIT_FAILURE;
+	file = fopen(argv[1], "r");
+	if (file == NULL)
+	{
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		return (EXIT_FAILURE);
+	}
+
+	while (getline(&line, &len, file) != -1)
+        {
+		line_number++;
+		if (process_line(line, &stack, line_number) == EXIT_FAILURE)
+		{
+			free_resources(file, line, &stack);
+			return (EXIT_FAILURE);
+		}
+	}
+
+	free_resources(file, line, &stack);
 	return (EXIT_SUCCESS);
 }
 
