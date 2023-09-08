@@ -1,110 +1,125 @@
 #include "monty.h"
-
-/**
- * is_integer - Verifica si una cadena es un número entero válido.
- * @str: Cadena de entrada a verificar
- * Return: 1 si es un número entero válido, 0 en caso contrario.
- */
-int is_integer(const char *str)
-{
-	if (*str == '-' || *str == '+')
-		str++; /* Permite un signo negativo o positivo al principio */
-	if (*str == '\0')
-		return (0); /* La cadena está vacía */
-
-	for (; *str != '\0'; str++)
-	{
-		if (!isdigit(*str))
-			return (0); /* No es un dígito */
-	}
-	return (1); /* Es un número entero */
-}
-
-/**
- * free_resources - Libera los recursos al finalizar el programa.
- * @file: Puntero al archivo abierto
- * @line: Puntero a la línea leída
- * @stack: Puntero a la pila
- */
-void free_resources(FILE *file, char *line, stack_t **stack)
-{
-	if (file)
-		fclose(file); /* Cierra el archivo si está abierto */
-	if (line)
-		free(line); /* Libera la memoria asignada a la línea leída */
-	if (*stack)
-		free_dlistint(*stack); /* Libera la memoria de la pila */
-}
-
 /**
  * main - Monty interpreter main function
  * @argc: Argument count
  * @argv: Argument values
  * Return: 0 on success, 1 on failure
  */
-
 int main(int argc, char *argv[])
 {
 	char *opcode, *value, *line = NULL;
-        size_t line_number = 0;
-	size_t len = 0;
-        FILE *file;
+	size_t line_number = 0, len = 0;
+	FILE *file;
+	int i;
 
-        if (argc != 2)
-        {
+	if (argc != 2)
+	{
 		fprintf(stderr, "USAGE: monty file\n");
-                return (EXIT_FAILURE);
-        }
-
+		exit(EXIT_FAILURE);
+	}
 	file = fopen(argv[1], "r");
 	if (file == NULL)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
-	stack_t *stack = NULL;
-
 	while (getline(&line, &len, file) != -1)
-        {
+	{
 		line_number++;
 		opcode = strtok(line, " \t$\n");
-
-                if (!opcode || opcode[0] == '#')
+		if (opcode == NULL || opcode[0] == '#')
 			continue;
-
-		value = strtok(NULL, " $\n");
-		
-		if (!value || (strcmp(opcode, "push") == 0 && !is_integer(value)))
-                {
-			fprintf(stderr, "L%lu: usage: push integer\n", line_number);
-                        free_resources(file, line, &stack);
-                        return (EXIT_FAILURE);
-		}
-
 		if (strcmp(opcode, "push") == 0)
+		{
+			value = strtok(NULL, " $\n");
+			if (value == NULL)
+			{
+				fprintf(stderr, "L%lu: usage: push integer\n", line_number);
+				fclose(file);
+				free(line);
+				exit(EXIT_FAILURE);
+			}
+			for (i = 0; value[i] != '\0'; i++)
+			{
+				if (value[i] != '-' && !isdigit(value[i]))
+				{
+					fprintf(stderr, "L%lu: usage: push integer\n", line_number);
+					fclose(file);
+					free(line);
+					exit(EXIT_FAILURE);
+				}
+			}
 			push(&stack, atoi(value));
+		}
 		else if (strcmp(opcode, "pall") == 0)
+		{
 			pall(&stack, line_number);
+		}
 		else if (strcmp(opcode, "pint") == 0)
+		{
+			if (stack == NULL)
+			{
+				fprintf(stderr, "L%lu: can't pint, stack empty\n", line_number);
+				fclose(file);
+				exit(EXIT_FAILURE);
+			}
 			pint(&stack, line_number);
+		}
 		else if (strcmp(opcode, "pop") == 0)
-			pop(&stack, line_number);
+		{
+			if (stack == NULL)
+			{
+				fprintf(stderr, "L%lu: can't pop an empty stack\n", line_number);
+				fclose(file);
+				exit(EXIT_FAILURE);
+			}
+
+			 pop(&stack, line_number);
+		}
 		else if (strcmp(opcode, "swap") == 0)
+		{
+			if (stack == NULL || stack->next == NULL)
+			{
+				fprintf(stderr, "L%lu: can't swap, stack too short\n", line_number);
+				fclose(file);
+				free_dlistint(stack);
+		                free(line);
+		                exit(EXIT_FAILURE);
+			}
 			swap(&stack, line_number);
+		}
 		else if (strcmp(opcode, "add") == 0)
+		{
+			if (stack == NULL || stack->next == NULL)
+			{
+				fprintf(stderr, "L%lu: can't add, stack too short\n", line_number);
+				fclose(file);
+				free_dlistint(stack);
+				free(line);
+				exit(EXIT_FAILURE);
+			}
 			add(&stack, line_number);
-		else if (strcmp(opcode, "nop") != 0)
+		}
+		else if (strcmp(opcode, "nop") == 0)
+		{
+			nop(&stack, line_number);
+		}
+		else
 		{
 			fprintf(stderr, "L%lu: unknown instruction %s\n", line_number, opcode);
-			free_resources(file, line, &stack);
-			return (EXIT_FAILURE);
+			fclose(file);
+			free(line);
+			free_dlistint(stack);
+			exit(EXIT_FAILURE);
 		}
+		free(line);
+		line = NULL;
 	}
-
-	free_resources(file, line, &stack);
-	return (EXIT_SUCCESS);
+	free_dlistint(stack);
+	free(line);
+	fclose(file);
+	return (0);
 }
-
 /**
  * push - Pushes an element onto the stack
  * @stack: Pointer to the stack
@@ -126,7 +141,6 @@ void push(stack_t **stack, int value)
 		(*stack)->prev = new_node;
 	*stack = new_node;
 }
-
 /**
  * pall - Prints all values on the stack
  * @stack: Pointer to the stack
