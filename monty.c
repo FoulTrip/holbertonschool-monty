@@ -48,11 +48,18 @@ int main(int argc, char *argv[])
         size_t line_number = 0, len = 0;
         FILE *file;
 
-        if (argc != 2 || !(file = fopen(argv[1], "r")))
+        if (argc != 2)
         {
 		fprintf(stderr, "USAGE: monty file\n");
-                return EXIT_FAILURE;
+                return (EXIT_FAILURE);
         }
+
+	file = fopen(argv[1], "r");
+	if (file == NULL)
+	{
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		return (EXIT_FAILURE);
+	}
 	stack_t *stack = NULL;
 
 	while (getline(&line, &len, file) != -1)
@@ -88,12 +95,12 @@ int main(int argc, char *argv[])
 		{
 			fprintf(stderr, "L%lu: unknown instruction %s\n", line_number, opcode);
 			free_resources(file, line, &stack);
-			return EXIT_FAILURE;
+			return (EXIT_FAILURE);
 		}
 	}
 
 	free_resources(file, line, &stack);
-	return EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
 /**
  * push - Pushes an element onto the stack
