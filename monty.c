@@ -1,4 +1,41 @@
 #include "monty.h"
+
+/**
+ * is_integer - Verifica si una cadena es un número entero válido.
+ * @str: Cadena de entrada a verificar
+ * Return: 1 si es un número entero válido, 0 en caso contrario.
+ */
+int is_integer(const char *str)
+{
+	if (*str == '-' || *str == '+')
+		str++; /* Permite un signo negativo o positivo al principio */
+	if (*str == '\0')
+		return (0); /* La cadena está vacía */
+
+	for (; *str != '\0'; str++)
+	{
+		if (!isdigit(*str))
+			return (0); /* No es un dígito */
+	}
+	return (1); /* Es un número entero */
+}
+
+/**
+ * free_resources - Libera los recursos al finalizar el programa.
+ * @file: Puntero al archivo abierto
+ * @line: Puntero a la línea leída
+ * @stack: Puntero a la pila
+ */
+void free_resources(FILE *file, char *line, stack_t **stack)
+{
+	if (file)
+		fclose(file); /* Cierra el archivo si está abierto */
+	if (line)
+		free(line); /* Libera la memoria asignada a la línea leída */
+	if (*stack)
+		free_dlistint(*stack); /* Libera la memoria de la pila */
+}
+
 /**
  * main - Monty interpreter main function
  * @argc: Argument count
@@ -8,14 +45,22 @@
 int main(int argc, char *argv[])
 {
 	char *opcode, *value, *line = NULL;
-        size_t line_number = 0, len = 0;
+        size_t line_number = 0;
+	size_t len = 0;
         FILE *file;
 
-        if (argc != 2 || !(file = fopen(argv[1], "r")))
+        if (argc != 2)
         {
 		fprintf(stderr, "USAGE: monty file\n");
-                return EXIT_FAILURE;
+                return (EXIT_FAILURE);
         }
+
+	file = fopen(argv[1], "r");
+	if (file == NULL)
+	{
+		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		return (EXIT_FAILURE);
+	}
 	stack_t *stack = NULL;
 
 	while (getline(&line, &len, file) != -1)
@@ -32,7 +77,7 @@ int main(int argc, char *argv[])
                 {
 			fprintf(stderr, "L%lu: usage: push integer\n", line_number);
                         free_resources(file, line, &stack);
-                        return EXIT_FAILURE;
+                        return (EXIT_FAILURE);
 		}
 
 		if (strcmp(opcode, "push") == 0)
@@ -51,12 +96,12 @@ int main(int argc, char *argv[])
 		{
 			fprintf(stderr, "L%lu: unknown instruction %s\n", line_number, opcode);
 			free_resources(file, line, &stack);
-			return EXIT_FAILURE;
+			return (EXIT_FAILURE);
 		}
 	}
 
 	free_resources(file, line, &stack);
-	return EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
 /**
  * push - Pushes an element onto the stack
