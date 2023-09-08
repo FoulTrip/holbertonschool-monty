@@ -42,6 +42,7 @@ void free_resources(FILE *file, char *line, stack_t **stack)
  * @argv: Argument values
  * Return: 0 on success, 1 on failure
  */
+
 int main(int argc, char *argv[])
 {
 	char *opcode, *value, *line = NULL;
@@ -103,6 +104,7 @@ int main(int argc, char *argv[])
 	free_resources(file, line, &stack);
 	return (EXIT_SUCCESS);
 }
+
 /**
  * push - Pushes an element onto the stack
  * @stack: Pointer to the stack
@@ -124,6 +126,7 @@ void push(stack_t **stack, int value)
 		(*stack)->prev = new_node;
 	*stack = new_node;
 }
+
 /**
  * pall - Prints all values on the stack
  * @stack: Pointer to the stack
