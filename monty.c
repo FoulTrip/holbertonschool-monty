@@ -76,6 +76,18 @@ int main(int argc, char *argv[])
 
 			 pop(&stack, line_number);
 		}
+		else if
+		{
+			if (stack == NULL || (*stack)->next == NULL)
+			{
+				fprintf(stderr, "L%lu: can't swap, stack too short\n", line_number);
+				fclose(file);
+				free_dlistint(stack);
+		                free(line);
+		                exit(EXIT_FAILURE);
+			}
+			swap(&stack, line_number);
+		}
 		else
 		{
 			fprintf(stderr, "L%lu: unknown instruction %s\n", line_number, opcode);
@@ -172,4 +184,22 @@ void free_dlistint(stack_t *stack)
 		stack = stack->next;
 		free(tmp);
 	}
+}
+
+/**
+ * swap - Swaps the top two elements of the stack
+ * @stack: Puntero a la pila
+ * @line_number: Número de línea en el script
+ */
+void swap(stack_t **stack, unsigned int line_number)
+{
+	if (*stack == NULL || (*stack)->next == NULL)
+	{
+		fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
+		exit(EXIT_FAILURE);
+	}
+
+	int tmp = (*stack)->n;
+	(*stack)->n = (*stack)->next->n;
+	(*stack)->next->n = tmp;
 }
